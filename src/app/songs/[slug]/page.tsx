@@ -60,10 +60,7 @@ export default function SongPage() {
     <main className="min-h-screen bg-white">
       <div className="border-b border-gray-100 px-4 py-3 flex items-center justify-between sticky top-0 bg-white z-10">
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => router.push('/')}
-            className="text-gray-400 hover:text-gray-600 text-lg leading-none"
-          >
+          <button onClick={() => router.push('/')} className="text-gray-400 hover:text-gray-600 text-lg leading-none">
             &larr;
           </button>
           <div>
@@ -72,22 +69,22 @@ export default function SongPage() {
           </div>
         </div>
         <div className="flex gap-1">
-          <button
-            onClick={() => setLayout('side')}
-            className={layout === 'side' ? 'text-xs px-3 py-1.5 rounded-lg border bg-indigo-600 text-white border-indigo-600' : 'text-xs px-3 py-1.5 rounded-lg border bg-white text-gray-500 border-gray-200'}
-          >
+          <button onClick={() => setLayout('side')} className={layout === 'side' ? 'text-xs px-3 py-1.5 rounded-lg border bg-indigo-600 text-white border-indigo-600' : 'text-xs px-3 py-1.5 rounded-lg border bg-white text-gray-500 border-gray-200'}>
             Side by side
           </button>
-          <button
-            onClick={() => setLayout('stacked')}
-            className={layout === 'stacked' ? 'text-xs px-3 py-1.5 rounded-lg border bg-indigo-600 text-white border-indigo-600' : 'text-xs px-3 py-1.5 rounded-lg border bg-white text-gray-500 border-gray-200'}
-          >
+          <button onClick={() => setLayout('stacked')} className={layout === 'stacked' ? 'text-xs px-3 py-1.5 rounded-lg border bg-indigo-600 text-white border-indigo-600' : 'text-xs px-3 py-1.5 rounded-lg border bg-white text-gray-500 border-gray-200'}>
             Stacked
           </button>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
+        {layout === 'side' && (
+          <div className="grid grid-cols-2 gap-4 mb-4 pb-3 border-b border-gray-100">
+            <p className="text-xs text-gray-400">🇹🇷 Türkçe</p>
+            <p className="text-xs text-gray-400 pl-4">🇺🇸 English</p>
+          </div>
+        )}
         {sections.map((section) => {
           const trLines = splitLines(section.lines_tr)
           const enLines = splitLines(section.lines_en)
@@ -99,13 +96,11 @@ export default function SongPage() {
               {layout === 'side' ? (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <p className="text-xs text-gray-400 mb-2">🇹🇷 Türkçe</p>
                     {trLines.map((line, i) => (
                       <p key={i} className="text-sm font-medium text-gray-900 leading-relaxed">{line}</p>
                     ))}
                   </div>
                   <div className="space-y-1 border-l border-gray-100 pl-4">
-                    <p className="text-xs text-gray-400 mb-2">🇺🇸 English</p>
                     {enLines.map((line, i) => (
                       <p key={i} className="text-sm italic text-gray-500 leading-relaxed">{line}</p>
                     ))}
