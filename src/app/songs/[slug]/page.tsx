@@ -4,6 +4,13 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase, type Song, type Section } from '@/lib/supabase'
 
+function splitLines(text: string): string[] {
+  return text
+    .split(/\s*\/\s*|\n/)
+    .map(l => l.trim())
+    .filter(l => l.length > 0)
+}
+
 export default function SongPage() {
   const { slug } = useParams()
   const router = useRouter()
@@ -78,38 +85,42 @@ export default function SongPage() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
-        {sections.map((section) => (
-          <div key={section.id} className="mb-8">
-            <p className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-3">
-              {section.label}
-            </p>
-            {layout === 'side' ? (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <p className="text-xs text-gray-400 mb-2">TR</p>
-                  {section.lines_tr.split('\n').map((line, i) => (
-                    <p key={i} className="text-sm font-medium text-gray-900 leading-relaxed">{line}</p>
-                  ))}
-                </div>
-                <div className="space-y-1 border-l border-gray-100 pl-4">
-                  <p className="text-xs text-gray-400 mb-2">EN</p>
-                  {section.lines_en.split('\n').map((line, i) => (
-                    <p key={i} className="text-sm italic text-gray-500 leading-relaxed">{line}</p>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {section.lines_tr.split('\n').map((line, i) => (
-                  <div key={i}>
-                    <p className="text-sm font-medium text-gray-900 leading-relaxed">{line}</p>
-                    <p className="text-xs italic text-gray-500 leading-relaxed mt-0.5">{section.lines_en.split('\n')[i] || ''}</p>
+        {sections.map((section) => {
+          const trLines = splitLines(section.lines_tr)
+          const enLines = splitLines(section.lines_en)
+          return (
+            <div key={section.id} className="mb-8">
+              <p className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-3">
+                {section.label}
+              </p>
+              {layout === 'side' ? (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <p className="text-xs text-gray-400 mb-2">🇹🇷 Türkçe</p>
+                    {trLines.map((line, i) => (
+                      <p key={i} className="text-sm font-medium text-gray-900 leading-relaxed">{line}</p>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+                  <div className="space-y-1 border-l border-gray-100 pl-4">
+                    <p className="text-xs text-gray-400 mb-2">🇬🇧 English</p>
+                    {enLines.map((line, i) => (
+                      <p key={i} className="text-sm italic text-gray-500 leading-relaxed">{line}</p>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {trLines.map((line, i) => (
+                    <div key={i}>
+                      <p className="text-sm font-medium text-gray-900 leading-relaxed">{line}</p>
+                      <p className="text-xs italic text-gray-500 leading-relaxed mt-0.5">{enLines[i] || ''}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })}
         {song.artist && (
           <p className="text-xs text-gray-400 text-center mt-8 border-t border-gray-100 pt-4">{song.artist}</p>
         )}
