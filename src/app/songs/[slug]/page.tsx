@@ -8,6 +8,9 @@ function splitLines(text: string): string[] {
   return text
     .split(/\s*\/\s*|\n/)
     .map(l => l.trim())
+    .map(l => l.replace(/^\d+\.?\s*/, ''))
+    .map(l => l.replace(/^Koro:\s*/i, ''))
+    .map(l => l.replace(/^Chorus:\s*/i, ''))
     .filter(l => l.length > 0)
 }
 
@@ -102,7 +105,7 @@ export default function SongPage() {
                     ))}
                   </div>
                   <div className="space-y-1 border-l border-gray-100 pl-4">
-                    <p className="text-xs text-gray-400 mb-2">🇬🇧 English</p>
+                    <p className="text-xs text-gray-400 mb-2">🇺🇸 English</p>
                     {enLines.map((line, i) => (
                       <p key={i} className="text-sm italic text-gray-500 leading-relaxed">{line}</p>
                     ))}
